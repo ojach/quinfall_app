@@ -86,56 +86,46 @@ const useShieldCheck = document.getElementById("useShield");
 
 let currentSlots = [...ALL_SLOTS];
 
-function buildslots(slotName) {
-  const row = document.createElement("div");
-  row.className = "slot-row";
-  row.dataset.slot = slotName;
+function buildSlots(){
+  slotArea.innerHTML = "";
+  currentSlots.forEach(slotName=>{
+    const row = document.createElement("div");
+    row.className = "slot-row";
 
-  row.innerHTML = `
-    <div class="slot-line1">
-      <span class="slot-label">${slotName}</span>
-      <select class="rarity-select">
-        <option value="legendary">LEG</option>
-        <option value="rare">RARE</option>
-        <option value="uncommon">UNC</option>
-      </select>
-      <select class="talisman-select">
-        <option value="">タリスマン未選択</option>
-        ${Object.keys(TALISMAN_MASTER).map(key =>
-          `<option value="${key}">${key}</option>`
-        ).join("")}
-      </select>
-    </div>
+    row.innerHTML = `
+      <!-- タリスマン行 -->
+      <div class="talisman-row">
+        <div class="slot-label">${escapeHtml(slotName)}</div>
+        <select class="talisman-select">
+          <option value="">タリスマンなし</option>
+          ${Object.keys(TALISMANS).map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("")}
+        </select>
+        <select class="rarity-select">
+          <option value="legendary">LEG</option>
+          <option value="rare">RARE</option>
+          <option value="uncommon">UNC</option>
+        </select>
+      </div>
 
-    <div class="slot-line2">
-      <span class="slot-sub-label">PowerStone</span>
-      <select class="ps-select" data-ps-index="0">
-        <option value="">なし</option>
-        ${Object.keys(POWER_STONE_MASTER).map(key =>
-          `<option value="${key}">${key}</option>`
-        ).join("")}
-      </select>
-      <select class="ps-select" data-ps-index="1">
-        <option value="">なし</option>
-        ${Object.keys(POWER_STONE_MASTER).map(key =>
-          `<option value="${key}">${key}</option>`
-        ).join("")}
-      </select>
-      <select class="ps-select" data-ps-index="2">
-        <option value="">なし</option>
-        ${Object.keys(POWER_STONE_MASTER).map(key =>
-          `<option value="${key}">${key}</option>`
-        ).join("")}
-      </select>
-    </div>
-  `;
+      <!-- ストーン行（3個） -->
+      <div class="stone-row">
+        ${[1,2,3].map(()=>`
+          <select class="stone-select">
+            <option value="">ストーンなし</option>
+            ${Object.keys(POWER_STONES).map(n=>
+              `<option value="${escapeHtml(n)}">${escapeHtml(POWER_STONES[n].ui)} (${escapeHtml(n)})</option>`
+            ).join("")}
+          </select>
+        `).join("")}
+      </div>
+    `;
 
-  // ここで change イベントのハンドラをつなげる（既存のロジックに合わせて）
-  row.querySelectorAll('select').forEach(sel => {
-    sel.addEventListener('change', handleSelectionChange);
+    slotArea.appendChild(row);
   });
 
-  return row;
+  slotArea.querySelectorAll("select").forEach(sel=>{
+    sel.addEventListener("change", handleChange);
+  });
 }
 
 function handleChange(e){
@@ -175,11 +165,41 @@ levelSelect.addEventListener("change", updateAll);
 
 // ========== 計算 ==========
 
-function updateAll(){
+// ---- 武器パワーストーン一括適用 ----
+function copyWeaponStonesToOthers(rows){
+  const weaponRow = rows.find(r => 
+    r.querySelector(".slot-label").textContent === "武器"
+  );
+  if (!weaponRow) return;
+
+  const weaponStones = Array.from(weaponRow.querySelectorAll(".stone-select"))
+    .map(sel => sel.value);
+
+  const isAnySet = weaponStones.some(v => v);
+
+  if (!isAnySet) return; // 武器にセットされてない → 何もしない
+
+  // 全装備へ反映
+  rows.forEach(row=>{
+    const label = row.querySelector(".slot-label").textContent;
+    if (label === "武器") return;
+
+    const stoneSelects = Array.from(row.querySelectorAll(".stone-select"));
+    weaponStones.forEach((val, idx)=>{
+      if (val){
+        stoneSelects[idx].value = val;
+      }
+    });
+  });
+}
+function updateAll(){  
   const level = levelSelect.value; // "60","75","100","110"
 
   const rows = Array.from(slotArea.querySelectorAll(".slot-row"));
+  // 武器ストーン → 全装備コピー
+  copyWeaponStonesToOthers(rows);
 
+  // --- この下は既存の処理のままでOK ---
   const flatTotals = {};
   const pctTotals = {};
   const talismanUsage = {}; // nameJP -> {count, rarity}
