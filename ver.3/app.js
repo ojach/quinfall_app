@@ -416,9 +416,9 @@ function buildEffectTable(){
     rows += `
       <tr>
         <td>${escapeHtml(name)}</td>
-        <td class="legend-col">${leg}</td>
-        <td class="rare-col">${rare}</td>
-        <td class="uncommon-col">${uncommon}</td>
+        <td class="legend-col">${fmtSet(leg)}</td>
+        <td class="rare-col">${fmtSet(rare)}</td>
+        <td class="uncommon-col">${fmtSet(uncommon)}</td>
         
       </tr>
     `;
