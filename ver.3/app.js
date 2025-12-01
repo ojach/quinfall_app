@@ -1,3 +1,5 @@
+// ====== グローバル設定 ======
+let initialStoneSyncDone = false;
 // ========== ヘルパー ==========
 const ALL_SLOTS = [
   "武器","頭","胴体","腕","足","首飾り",
@@ -15,6 +17,9 @@ const RARITY_LABEL_JP = {
   "rare": "レア",
   "legendary": "レジェンダリー"
 };
+function slotNameFromRow(row){
+  return row ? row.querySelector(".slot-label")?.textContent.trim() : "";
+}
 
 function escapeHtml(s){
   return String(s)
@@ -135,35 +140,24 @@ function buildSlots(){
 
 function handleChange(e){
   const row = e.target.closest(".slot-row");
-  const slotName = row.querySelector(".slot-label").textContent.trim();
 
-  // どこが変更されたか
-  const isStone = e.target.classList.contains("stone-select");
-
-  // ◇ 1) パワーストーンの場合 → 手動変更フラグを立てる
-  if (isStone){
-    manualStoneChange[slotName] = true;
-  }
-
-  // ◇ 2) 武器のパワーストーンが変更されたら全スロットにコピーする（A1仕様）
-  if (slotName === "武器" && isStone){
+  // ▼ 同一スロット内の重複禁止（←今あるやつ）
+  if (row){
     const stoneSelects = Array.from(row.querySelectorAll(".stone-select"));
-    const stoneValues = stoneSelects.map(x => x.value);
-
-    currentSlots.forEach(otherSlot => {
-      if (otherSlot === "武器") return;
-      if (manualStoneChange[otherSlot]) return; // 手動で変更されたスロットは無視
-
-      const targetRow = [...slotArea.querySelectorAll(".slot-row")]
-        .find(r => r.querySelector(".slot-label").textContent.trim() === otherSlot);
-
-      if (!targetRow) return;
-
-      const otherSelects = Array.from(targetRow.querySelectorAll(".stone-select"));
-      otherSelects.forEach((sel, i)=>{
-        sel.value = stoneValues[i] || "";
+    const chosen = stoneSelects.map(s=>s.value).filter(v=>v);
+    stoneSelects.forEach(sel=>{
+      const current = sel.value;
+      Array.from(sel.options).forEach(opt=>{
+        if (!opt.value) return;
+        opt.disabled = (opt.value !== current && chosen.includes(opt.value));
       });
     });
+  }
+
+  // ▼ A1：武器のパワーストーン → 他全部へ「最初だけ」自動反映
+  if (!initialStoneSyncDone && slotNameFromRow(row) === "武器") {
+    syncWeaponStonesToAllSlots();
+    initialStoneSyncDone = true;
   }
 
   updateAll();
@@ -188,6 +182,25 @@ function autoFillStonesFromWeapon(v1, v2, v3){
         if (!opt.value) return;
         opt.disabled = (opt.value !== cur && chosen.includes(opt.value));
       });
+    });
+  });
+}
+function syncWeaponStonesToAllSlots(){
+  const rows = Array.from(slotArea.querySelectorAll(".slot-row"));
+  const weaponRow = rows.find(r => slotNameFromRow(r) === "武器");
+  if (!weaponRow) return;
+
+  const weaponStones = Array.from(weaponRow.querySelectorAll(".stone-select"))
+    .map(s=>s.value);
+
+  rows.forEach(row=>{
+    if (slotNameFromRow(row) === "武器") return; // 武器はスキップ
+
+    const stones = row.querySelectorAll(".stone-select");
+    stones.forEach((sel, i)=>{
+      if (!sel.value && weaponStones[i]) {
+        sel.value = weaponStones[i];
+      }
     });
   });
 }
