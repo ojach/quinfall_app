@@ -93,32 +93,40 @@ function buildSlots(){
     row.className = "slot-row";
 
     row.innerHTML = `
-      <!-- タリスマン行 -->
-      <div class="talisman-row">
-        <div class="slot-label">${escapeHtml(slotName)}</div>
-        <select class="talisman-select">
-          <option value="">タリスマンなし</option>
-          ${Object.keys(TALISMANS).map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("")}
-        </select>
-        <select class="rarity-select">
-          <option value="legendary">LEG</option>
-          <option value="rare">RARE</option>
-          <option value="uncommon">UNC</option>
-        </select>
-      </div>
+  <!-- ◆ 1段目：タリスマン + レアリティ -->
+  <div class="slot-top-line">
+    <div class="slot-label">${escapeHtml(slotName)}</div>
+    <div class="slot-talisman">
+      <select class="talisman-select">
+        <option value="">タリスマンなし</option>
+        ${Object.keys(TALISMANS).map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("")}
+      </select>
+    </div>
+    <div class="slot-rarity">
+      <select class="rarity-select">
+        <option value="legendary">LEG</option>
+        <option value="rare">RARE</option>
+        <option value="uncommon">UNC</option>
+      </select>
+    </div>
+  </div>
 
-      <!-- ストーン行（3個） -->
-      <div class="stone-row">
-        ${[1,2,3].map(()=>`
-          <select class="stone-select">
-            <option value="">ストーンなし</option>
-            ${Object.keys(POWER_STONES).map(n=>
-              `<option value="${escapeHtml(n)}">${escapeHtml(POWER_STONES[n].ui)} (${escapeHtml(n)})</option>`
-            ).join("")}
-          </select>
-        `).join("")}
+  <!-- ◆ 2段目：パワーストーン（3枠） -->
+  <div class="slot-bottom-line">
+    ${[1,2,3].map(()=>`
+      <div class="slot-stone">
+        <select class="stone-select">
+          <option value="">ストーンなし</option>
+          ${
+            Object.keys(POWER_STONES)
+              .map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(POWER_STONES[n].ui)} (${escapeHtml(n)})</option>`)
+              .join("")
+          }
+        </select>
       </div>
-    `;
+    `).join("")}
+  </div>
+`;
 
     slotArea.appendChild(row);
   });
