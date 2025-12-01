@@ -199,3 +199,11 @@ select {
 .slot-bottom select {
   width: 100%;
 }
+@media (max-width: 430px) {
+  .slot-top {
+    grid-template-columns: 60px 1fr 60px;
+  }
+  .slot-bottom {
+    grid-template-columns: 60px 1fr 1fr 1fr;
+  }
+}
