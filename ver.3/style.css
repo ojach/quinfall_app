@@ -1,3 +1,4 @@
+/* ========== 基本リセット ========== */
 * { box-sizing: border-box; }
 
 body {
@@ -8,296 +9,63 @@ body {
   padding: 12px;
 }
 
-.top-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.top-bar h1 {
-  font-size: 18px;
-  margin: 0;
-}
-
-.top-controls {
-  margin-left: auto;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  font-size: 14px;
-}
-
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.6fr);
-  gap: 12px;
-}
-
-.card {
-  background: #fff;
-  border-radius: 8px;
-  padding: 10px 12px;
-  box-shadow: 0 1px 2px rgba(0,0,0,.06);
-}
-
-.card h2 {
-  margin: 0 0 8px 0;
-  font-size: 16px;
-}
-
-.card h3 {
-  margin: 12px 0 6px 0;
-  font-size: 14px;
-}
-
-.muted {
-  color: #666;
+/* ========== 共通UI ========== */
+select {
+  padding: 4px 6px;
   font-size: 13px;
+  width: 100%;
 }
 
-#slotArea {
+.slot-label {
+  font-weight: 600;
+  min-width: 70px;
+}
+
+/* ========== スロット全体 ========== */
+.slot-row {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 70vh;
-  overflow: auto;
-}
-
-.slot-row {
-  display: grid;
-  grid-template-columns: 70px minmax(0, 1.4fr) 90px repeat(3, minmax(0, 1.2fr));
-  gap: 4px;
-  align-items: center;
-  font-size: 13px;
-}
-
-.slot-label {
-  font-weight: 600;
-}
-
-select {
-  width: 100%;
-  padding: 4px 6px;
-  font-size: 13px;
-}
-
-.note {
-  font-size: 11px;
-  margin-top: 8px;
-  color: #555;
-}
-
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 3px 0;
-  border-bottom: 1px dashed #eee;
-  font-size: 13px;
-}
-
-.detail-block {
-  font-size: 13px;
-  margin-bottom: 8px;
-  padding: 6px;
-  border-radius: 6px;
+  padding: 10px;
   background: #fafafa;
-}
-
-.detail-block h4 {
-  margin: 0 0 4px 0;
-  font-size: 13px;
-}
-
-.effect-table-wrap {
-  margin-top: 6px;
-  overflow-x: auto;
-}
-
-.effect-table {
-  border-collapse: collapse;
-  width: 100%;
-  min-width: 900px;
-  font-size: 12px;
-}
-
-.effect-table th,
-.effect-table td {
   border: 1px solid #ddd;
-  padding: 4px 6px;
-  vertical-align: top;
-}
-
-.effect-table th {
-  background: #f5f5f5;
-}
-
-.uncommon-col { background: #e7ffe7; }
-.rare-col { background: #e6efff; }
-.legend-col { background: #fff4c2; }
-
-.set-split {
-  border: none;
-  border-top: 1px dashed #ccc;
-  margin: 4px 0;
-}
-
-#freeMemo {
-  width: 100%;
-  padding: 6px;
-  font-size: 13px;
-}
-
-.rarity-badge {
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 600;
-  border: 1px solid rgba(0,0,0,.1);
-}
-
-.rarity-UNC { background: #e7ffe7; }
-.rarity-RARE { background: #e6efff; }
-.rarity-LEG { background: #fff4c2; }
-
-@media (max-width: 900px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-  #slotArea {
-    max-height: none;
-  }
-  .top-controls {
-    margin-left: 0;
-    flex-wrap: wrap;
-  }
-}
-.slot-row {
-  border-bottom: 1px solid #ddd;
-  padding: 6px 0;
-}
-
-.slot-line1,
-.slot-line2 {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
-}
-
-.slot-label {
-  min-width: 60px;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.slot-sub-label {
-  min-width: 80px;
-  font-size: 12px;
-  color: #666;
-}
-
-.slot-line1 select,
-.slot-line2 select {
-  flex: 1 1 auto;
-}
-
-/* スマホ幅のときは縦に詰め直す */
-@media (max-width: 768px) {
-  .slot-line1,
-  .slot-line2 {
-    flex-wrap: wrap;
-  }
-
-  .slot-label,
-  .slot-sub-label {
-    width: 100%;
-  }
-
-  .slot-line1 select,
-  .slot-line2 select {
-    flex: 1 1 100%;
-  }
-}
-/* ========== 2段構成レイアウト ========== */
-
-.slot-row {
-  border-bottom: 1px solid #ddd;
-  padding: 10px 0;
-}
-
-/* 1段目：タリスマン */
-.slot-top-line {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap; /* スマホ時に自然に折り返し */
-}
-
-.slot-label {
-  width: 80px;
-  font-weight: bold;
-}
-
-/* 2段目：パワーストーン */
-.slot-bottom-line {
-  display: flex;
-  gap: 10px;
-  margin-top: 6px;
-  flex-wrap: wrap; /* スマホ幅対策 */
-}
-
-.slot-bottom-line select {
-  min-width: 120px;
-}
-
-/* スマホ最適化（狭い場合は縦詰め） */
-@media (max-width: 480px) {
-  .slot-top-line {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .slot-bottom-line {
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 6px;
-  }
-  .slot-label {
-    width: auto;
-  }
-}
-/* １スロット全体の枠 */
-.slot-row {
-  display: flex;
-  flex-direction: column;  /* ← 全体は縦だが… */
-  gap: 6px;
-  padding: 8px;
+  border-radius: 8px;
   margin-bottom: 12px;
-  background: #fafafa;
-  border-radius: 6px;
-  border: 1px solid #ddd;
 }
 
-/* 上段（タリスマン + レアリティ）を横並び */
+/* ========== 上段：タリスマン + レアリティ ========== */
 .slot-top {
   display: flex;
   flex-direction: row;
+  gap: 10px;
   align-items: center;
-  gap: 8px;
+  flex-wrap: wrap; /* スマホ時折り返し */
 }
 
-/* 下段（ストーン3つ）を横並び */
+.slot-top select {
+  min-width: 120px;
+}
+
+/* ========== 下段：パワーストーン3つ ========== */
 .slot-bottom {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 10px;
+  flex-wrap: wrap; /* スマホ用 */
 }
 
-/* ラベル部分 */
-.slot-label {
-  width: 70px;
-  font-weight: 600;
-  color: #333;
+.slot-bottom select {
+  min-width: 120px;
+}
+
+/* ========== スマホ最適化 ========== */
+@media (max-width: 480px) {
+  .slot-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .slot-bottom {
+    flex-direction: column;
+    gap: 6px;
+  }
 }
