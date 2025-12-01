@@ -267,7 +267,7 @@ select {
 /* スマホ幅がもっと狭い時は縮める */
 @media (max-width: 380px) {
   .slot-top {
-    grid-template-columns: 55px 115px 60px;
+    grid-template-columns: 55px 2fr 60px;
   }
   .slot-bottom {
     grid-template-columns: 55px 1fr 1fr 1fr;
@@ -276,7 +276,7 @@ select {
 /* 上段 */
 .slot-top {
   display: grid;
-  grid-template-columns: 60px 1fr 70px;
+  grid-template-columns: 60px 2fr 70px;
   gap: 8px;
   align-items: center;
 }
