@@ -1,12 +1,12 @@
 {
   "name": "OJapp",
   "short_name": "OJapp",
-  "start_url": ".",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#e6f6ff",
   "description": "ホームを変えろ。自分も変わる。",
   "icons": [{
-    "src": "./icon.PNG",
+    "src": "./icon.PNG?v=11",
     "sizes": "192x192",
     "type": "image/png"
   }]
