@@ -5,9 +5,16 @@
   "display": "standalone",
   "background_color": "#e6f6ff",
   "description": "ホームを変えろ。自分も変わる。",
-  "icons": [{
-    "src": "icon.PNG?v=11",
-    "sizes": "192x192",
-    "type": "image/png"
-  }]
+  "icons": [
+    {
+      "src": "icon.PNG?v=11",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.PNG?v=11",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
