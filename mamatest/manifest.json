@@ -1,0 +1,7 @@
+{
+ "name":"谷口給食",
+ "short_name":"谷口給食",
+ "start_url":"./",
+ "display":"standalone",
+ "icons":[{"src":"./IMG_2295.jpg","sizes":"192x192","type":"image/png"}]
+}
